@@ -15,10 +15,10 @@ class Recipe:
     def __init__(self, model_function: callable, result_label: str = 'result') -> None:
         self.__model: callable = model_function
         self.__result_label: str = result_label
-        self.__variables: Dict[str, Variable] = {}
-        self.__corr_variables: list[tuple[str, callable]] = []
-        self.__error: tuple[str, callable] = [{}]
-        self.__data: Dict[str, list[bool | int | float | str]] = {}
+        self.__variables: Dict[str, Variable] = dict()
+        self.__corr_variables: list[tuple[str, callable]] = list()
+        self.__error: tuple[str, callable] = tuple()
+        self.__data: Dict[str, list[bool | int | float | str]] = dict()
 
     def add_variable(self, variable: Variable) -> None:
         """Adds an independent variable to the recipe
@@ -61,7 +61,7 @@ class Recipe:
             taking dictionary of variables as argument
             other variables in the recipe.
         """
-        if not len(labels) == len(variable_fn):
+        if len(labels) != len(variable_fn):
             error_msg = invalid_labels_and_functions_length_msg(
                 len(labels), len(variable_fn))
             raise ValueError(error_msg)
@@ -92,7 +92,6 @@ class Recipe:
         self.__generate_indepedent_var_values(size)
         self.__generate_corr_var_values()
         self.__generate_result_values()
-        print(self.__data.keys())
         return DataFrame.from_dict(self.__data)
 
     def __generate_result_values(self):
