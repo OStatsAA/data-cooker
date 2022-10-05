@@ -14,7 +14,6 @@ class ContinousVariable(Variable):
     """
     A continous variable defined by a distribution
     """
-    __values = []
 
     def __init__(self,
                  label: str,
@@ -22,6 +21,7 @@ class ContinousVariable(Variable):
                  missing_values_fraction: float = 0) -> None:
 
         self.__label: str = label
+        self.__values: list = []
         self.__distribtuion: rv_continuous = distribution
 
         if not is_valid_fraction(missing_values_fraction):
