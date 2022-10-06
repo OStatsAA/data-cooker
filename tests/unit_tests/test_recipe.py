@@ -87,3 +87,19 @@ def test_recipes_accepts_error_variable() -> None:
     expected_columns = ["x", "result"]
 
     assert data.columns.to_list() == expected_columns
+
+
+def test_recipe_should_apply_missing_entries_fraction() -> None:
+    """
+    Should apply each variable missing data fraction.
+    Result should not be affected
+    """
+    size: int = 10
+    fraction: float = .25
+    recipe = Recipe(lambda data, error: 0 + data['x'])
+    recipe.add_variable(ContinousVariable(
+        "x", missing_values_fraction=fraction))
+    data = recipe.cook(size)
+
+    assert data['x'].count() == (size - int(fraction * size))
+    assert data['result'].count() == size

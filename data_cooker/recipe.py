@@ -2,6 +2,7 @@
 
 from typing import Dict
 from numpy import ndarray
+from numpy.random import choice
 from pandas import DataFrame
 
 from data_cooker.variables.variable import Variable
@@ -93,7 +94,17 @@ class Recipe:
         self.__generate_indepedent_var_values(size)
         self.__generate_corr_var_values()
         self.__generate_result_values(size)
+        self.__apply_missing_data_fraction(size)
         return DataFrame.from_dict(self.__data)
+
+    def __apply_missing_data_fraction(self, size: int) -> None:
+        for label, variable in self.__variables.items():
+            fraction = variable.missing_values_fraction
+            if fraction:
+                values = self.__data[label]
+                choices_count = int(fraction * size)
+                values[choice(size, choices_count, replace=False)] = None
+                self.__data.update({label: values})
 
     def __generate_error_values(self, size: int) -> int | ndarray:
         if not self.__error:
