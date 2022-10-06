@@ -10,7 +10,7 @@ def test_recipe_accepts_one_independent_vars_only() -> None:
     """Recipe is valid even only a single indepedent variable in included"""
     size = 10
     variable = ContinousVariable("x")
-    recipe = Recipe(lambda data, noise: data['x'])
+    recipe = Recipe(lambda data, error: data['x'])
     recipe.add_variable(variable)
     data = recipe.cook(size)
 
@@ -21,7 +21,7 @@ def test_recipe_adds_many_variables_at_once() -> None:
     """Tests if variables added to recipe have columns in output dataframe"""
     var_a = ContinousVariable("a")
     var_b = ContinousVariable("b")
-    recipe = Recipe(lambda vars, noise: vars['a'] - vars['b'])
+    recipe = Recipe(lambda vars, error: vars['a'] - vars['b'])
     recipe.add_variables([var_a, var_b])
     data = recipe.cook(10)
     expected_columns = ["a", "b", "result"]
@@ -31,14 +31,14 @@ def test_recipe_adds_many_variables_at_once() -> None:
 
 def test_throws_error_if_no_indepedent_variable_is_added() -> None:
     """Should throw an error if no indepedent variable is included"""
-    recipe = Recipe(lambda data, noise: data['x'])
+    recipe = Recipe(lambda data, error: data['x'])
     with pytest.raises(ValueError):
         assert recipe.cook()
 
 
 def test_recipes_accepts_corr_variable() -> None:
     """Should have method to set a single correlated variable"""
-    recipe = Recipe(lambda data, noise: data['x'])
+    recipe = Recipe(lambda data, error: data['x'])
     recipe.add_variable(ContinousVariable("x"))
     recipe.add_corr_variable("corr_x", lambda data: data["x"] * .5)
     data = recipe.cook(10)
@@ -49,7 +49,7 @@ def test_recipes_accepts_corr_variable() -> None:
 
 def test_recipes_accepts_many_corr_variables() -> None:
     """Should have method to set many correlated variable"""
-    recipe = Recipe(lambda data, noise: data['x'])
+    recipe = Recipe(lambda data, error: data['x'])
     recipe.add_variable(ContinousVariable("x"))
 
     def corr_x1_fn(data):
@@ -68,7 +68,7 @@ def test_throw_error_if_corr_variables_labels_and_functions_lenths_are_diff() ->
     """
     Should accept many correlated variables only if length of labels match the length of functions
     """
-    recipe = Recipe(lambda data, noise: data['x'])
+    recipe = Recipe(lambda data, error: data['x'])
     recipe.add_variable(ContinousVariable("x"))
 
     def corr_x1_fn(data):
@@ -78,11 +78,11 @@ def test_throw_error_if_corr_variables_labels_and_functions_lenths_are_diff() ->
         assert recipe.add_corr_variables(["corr_x1", "corr_x2"], [corr_x1_fn])
 
 
-def test_recipes_accepts_noise_variable() -> None:
-    """Should have method to set a single noise variable"""
-    recipe = Recipe(lambda data, noise: data['x'])
+def test_recipes_accepts_error_variable() -> None:
+    """Should have method to set a single error variable"""
+    recipe = Recipe(lambda data, error: data['x'])
     recipe.add_variable(DiscreteVariable("x"))
-    recipe.add_error("noise_n", lambda data: data["x"] * .5)
+    recipe.add_error(lambda data, size: data["x"] * .5)
     data = recipe.cook(10)
     expected_columns = ["x", "result"]
 

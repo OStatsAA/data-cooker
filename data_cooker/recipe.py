@@ -1,6 +1,7 @@
 """Recipe module"""
 
 from typing import Dict
+from numpy import ndarray
 from pandas import DataFrame
 
 from data_cooker.variables.variable import Variable
@@ -17,7 +18,7 @@ class Recipe:
         self.__result_label: str = result_label
         self.__variables: Dict[str, Variable] = dict()
         self.__corr_variables: list[tuple[str, callable]] = list()
-        self.__error: tuple[str, callable] = tuple()
+        self.__error: callable = None
         self.__data: Dict[str, list[bool | int | float | str]] = dict()
 
     def add_variable(self, variable: Variable) -> None:
@@ -69,14 +70,14 @@ class Recipe:
         for index, label in enumerate(labels):
             self.add_corr_variable(label, variable_fn[index])
 
-    def add_error(self, label: str, lambda_fn: callable) -> None:
+    def add_error(self, lambda_fn: callable) -> None:
         """Adds an error component that directly influences the resulting variable
 
         Args:
             label (str): noise variable name
             lambda_fn (callable): _description_
         """
-        self.__error = (label, lambda_fn)
+        self.__error = lambda_fn
 
     def cook(self, size: int = 100) -> DataFrame:
         """Cooks the recipe!
@@ -91,26 +92,34 @@ class Recipe:
         """
         self.__generate_indepedent_var_values(size)
         self.__generate_corr_var_values()
-        self.__generate_result_values()
+        self.__generate_result_values(size)
         return DataFrame.from_dict(self.__data)
 
-    def __generate_result_values(self):
-        self.__data.update({self.__result_label: self.__apply_formula()})
+    def __generate_error_values(self, size: int) -> int | ndarray:
+        if not self.__error:
+            return 0
 
-    def __generate_corr_var_values(self):
+        return self.__error(self.__data, size)
+
+    def __generate_result_values(self, size: int) -> None:
+        error_values = self.__generate_error_values(size)
+        results = self.__apply_model(error_values)
+        self.__data.update({self.__result_label: results})
+
+    def __generate_corr_var_values(self) -> None:
         if bool(self.__corr_variables):
             for (label, corr_fn) in self.__corr_variables:
                 self.__data.update({label: corr_fn(self.__data)})
 
-    def __generate_indepedent_var_values(self, size):
+    def __generate_indepedent_var_values(self, size: int) -> None:
         if not self.__variables:
             raise ValueError(NO_VARIABLES_ERROR_MSG)
 
         for label, variable in self.__variables.items():
             self.__data.update({label: variable.simulate_values(size)})
 
-    def __apply_formula(self):
-        return self.__model(self.__data, self.__error)
+    def __apply_model(self, error_values):
+        return self.__model(self.__data, error_values)
 
 
 def invalid_labels_and_functions_length_msg(length_labels: int, length_functions: int) -> str:
