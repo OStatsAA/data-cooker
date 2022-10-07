@@ -37,6 +37,7 @@ jobs:
           poetry run pytest --cov=data_cooker --cov-report=xml
   
   CodeAnalysis:
+    needs: Build
     runs-on: ubuntu-latest
     
     steps:
