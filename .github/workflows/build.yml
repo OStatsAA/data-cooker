@@ -34,7 +34,7 @@ jobs:
           source .venv/bin/activate
       - name: Test with pytest
         run: |
-          pytest --cov=data_cooker --cov-report=html
+          poetry run pytest --cov=data_cooker --cov-report=html
   
   CodeAnalysis:
     runs-on: ubuntu-latest
