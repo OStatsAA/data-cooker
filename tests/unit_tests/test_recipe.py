@@ -1,9 +1,11 @@
 """Recipe module tests"""
 
+from array import array
 import pytest
 from data_cooker.recipe import Recipe
 from data_cooker.variables.continous_variable import ContinousVariable
 from data_cooker.variables.discrete_variable import DiscreteVariable
+from data_cooker.variables.nominal_variable import NominalVariable
 
 
 def test_recipe_accepts_one_independent_vars_only() -> None:
@@ -103,3 +105,27 @@ def test_recipe_should_apply_missing_entries_fraction() -> None:
 
     assert data['x'].count() == (size - int(fraction * size))
     assert data['result'].count() == size
+
+
+def test_recipe_data_should_have_nominal_var_as_dummies() -> None:
+    """
+    Recipe should expand NominalVariable to dummy columns
+    """
+    recipe = Recipe(lambda data, error: 0 + data['x.Cat1'] + data['x.Cat2'])
+    recipe.add_variable(NominalVariable('x', 2))
+    data = recipe.cook(100)
+    expected_columns = ["x.Cat1", "x.Cat2", "result"]
+
+    assert data.columns.tolist() == expected_columns
+
+
+def test_recipe_nominal_var_missing_data_whole_row() -> None:
+    """
+    Recipe should apply missing data to a NominalVariable to all columns in dummy set
+    """
+    recipe = Recipe(lambda data, error: 0 + data['x.Cat1'] + data['x.Cat2'])
+    recipe.add_variable(NominalVariable('x', 2, missing_values_fraction=.5))
+    data = recipe.cook(100)
+    expected_values_count = [50, 50, 100]
+
+    assert data.count().to_list() == expected_values_count

@@ -3,7 +3,8 @@
 from typing import Dict
 from numpy import ndarray
 from numpy.random import choice
-from pandas import DataFrame
+from pandas import DataFrame, get_dummies
+from data_cooker.variables.nominal_variable import NominalVariable
 
 from data_cooker.variables.variable import Variable
 
@@ -20,7 +21,7 @@ class Recipe:
         self.__variables: Dict[str, Variable] = dict()
         self.__corr_variables: list[tuple[str, callable]] = list()
         self.__error: callable = None
-        self.__data: Dict[str, list[bool | int | float | str]] = dict()
+        self.__data: Dict[str, ndarray] = dict()
 
     def add_variable(self, variable: Variable) -> None:
         """Adds an independent variable to the recipe
@@ -101,10 +102,18 @@ class Recipe:
         for label, variable in self.__variables.items():
             fraction = variable.missing_values_fraction
             if fraction:
-                values = self.__data[label]
                 choices_count = int(fraction * size)
-                values[choice(size, choices_count, replace=False)] = None
-                self.__data.update({label: values})
+                chosen_indexes = choice(size, choices_count, replace=False)
+                if isinstance(variable, NominalVariable):
+                    for category, values in self.__data.items():
+                        if category.startswith(f"{label}."):
+                            values = values.astype(float)
+                            values[chosen_indexes] = None
+                            self.__data.update({category: values})
+                else:
+                    values = self.__data[label]
+                    values[chosen_indexes] = None
+                    self.__data.update({label: values})
 
     def __generate_error_values(self, size: int) -> int | ndarray:
         if not self.__error:
@@ -127,7 +136,13 @@ class Recipe:
             raise ValueError(NO_VARIABLES_ERROR_MSG)
 
         for label, variable in self.__variables.items():
-            self.__data.update({label: variable.simulate_values(size)})
+            if isinstance(variable, NominalVariable):
+                dummies_dataframe = get_dummies(variable.simulate_values(size))
+                for column in dummies_dataframe:
+                    self.__data.update(
+                        {f"{label}.{column}": dummies_dataframe[column].values})
+            else:
+                self.__data.update({label: variable.simulate_values(size)})
 
     def __apply_model(self, error_values):
         return self.__model(self.__data, error_values)
