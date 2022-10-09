@@ -105,15 +105,18 @@ class Recipe:
                 choices_count = int(fraction * size)
                 chosen_indexes = choice(size, choices_count, replace=False)
                 if isinstance(variable, NominalVariable):
-                    for category, values in self.__data.items():
-                        if category.startswith(f"{label}."):
-                            values = values.astype(float)
-                            values[chosen_indexes] = None
-                            self.__data.update({category: values})
+                    self.__update_nominal_missing_data(label, chosen_indexes)
                 else:
                     values = self.__data[label]
                     values[chosen_indexes] = None
                     self.__data.update({label: values})
+
+    def __update_nominal_missing_data(self, label: str, chosen_indexes: ndarray) -> None:
+        for category, values in self.__data.items():
+            if category.startswith(f"{label}."):
+                values = values.astype(float)
+                values[chosen_indexes] = None
+                self.__data.update({category: values})
 
     def __generate_error_values(self, size: int) -> int | ndarray:
         if not self.__error:
