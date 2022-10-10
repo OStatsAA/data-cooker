@@ -1,11 +1,8 @@
 """Recipe module tests"""
 
-from array import array
 import pytest
 from data_cooker.recipe import Recipe
-from data_cooker.variables.continous_variable import ContinousVariable
-from data_cooker.variables.discrete_variable import DiscreteVariable
-from data_cooker.variables.nominal_variable import NominalVariable
+from data_cooker.variables import ContinousVariable, DiscreteVariable, NominalVariable
 
 
 def test_recipe_accepts_one_independent_vars_only() -> None:

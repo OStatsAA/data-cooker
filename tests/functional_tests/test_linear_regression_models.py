@@ -4,7 +4,7 @@ import math
 from scipy.stats import norm
 from statsmodels.regression.linear_model import OLS, RegressionResults
 from data_cooker.recipe import Recipe
-from data_cooker.variables.continous_variable import ContinousVariable
+from data_cooker.variables import ContinousVariable
 
 
 def test_linear_regression_one_var() -> None:
