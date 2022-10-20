@@ -1,4 +1,4 @@
-name: SonarCloud Analysis
+name: Build
 
 on:
   push:
@@ -38,11 +38,11 @@ jobs:
           
       - name: Test with pytest
         run: |
-          poetry run pytest --cov=data_cooker --cov-report=xml
+          poetry run pytest --cov=datacooker --cov-report=xml
       
       - name: Fix code coverage paths
         run: |
-          sed -i 's/\/home\/runner\/work\/<data-cooker>\/<data-cooker>\/<data_cooker>\//\/github\/workspace\//g' coverage.xml
+          sed -i 's/\/home\/runner\/work\/<data-cooker>\/<data-cooker>\/<datacooker>\//\/github\/workspace\//g' coverage.xml
           
       - name: Analyze with SonarCloud         
         uses: SonarSource/sonarcloud-github-action@master
@@ -58,5 +58,5 @@ jobs:
             -Dsonar.organization=ostatsaa
             -Dsonar.python.version=3
             -Dsonar.tests=tests
-            -Dsonar.sources=data_cooker # optional, default is project base directory
+            -Dsonar.sources=datacooker # optional, default is project base directory
 
