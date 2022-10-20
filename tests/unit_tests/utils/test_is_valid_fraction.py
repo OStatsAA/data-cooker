@@ -6,7 +6,7 @@ from math import inf
 from random import random
 import pytest
 
-from data_cooker.utils.is_valid_fraction import is_valid_fraction
+from datacooker.utils.is_valid_fraction import is_valid_fraction
 
 
 def test_passes_when_fraction_is_zero() -> None:

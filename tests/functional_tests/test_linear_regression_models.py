@@ -3,8 +3,8 @@
 import math
 from scipy.stats import norm
 from statsmodels.regression.linear_model import OLS, RegressionResults
-from data_cooker.recipe import Recipe
-from data_cooker.variables import ContinousVariable
+from datacooker.recipe import Recipe
+from datacooker.variables import ContinousVariable
 
 
 def test_linear_regression_one_var() -> None:

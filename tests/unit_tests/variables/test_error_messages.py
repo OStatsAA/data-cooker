@@ -4,8 +4,8 @@ Variables error messages testing module
 
 from scipy.stats import norm, poisson
 
-from data_cooker.variables.error_messages import invalid_distribution_type_msg
-from data_cooker.variables.error_messages import invalid_missing_values_fraction_msg
+from datacooker.variables.error_messages import invalid_distribution_type_msg
+from datacooker.variables.error_messages import invalid_missing_values_fraction_msg
 
 
 def test_if_missing_values_fraction_msg_contains_fraction_and_label_info() -> None:

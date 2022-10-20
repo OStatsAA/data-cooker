@@ -1,7 +1,7 @@
 """NominalVariable tests module"""
 
 import numpy as np
-from data_cooker.variables.nominal_variable import NominalVariable
+from datacooker.variables.nominal_variable import NominalVariable
 
 
 def test_should_generate_c_categories_n_times() -> None:

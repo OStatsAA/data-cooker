@@ -3,8 +3,8 @@
 from abc import ABC, abstractmethod
 import numpy as np
 
-from data_cooker.utils import is_valid_fraction
-from data_cooker.variables.error_messages import invalid_missing_values_fraction_msg
+from datacooker.utils import is_valid_fraction
+from datacooker.variables.error_messages import invalid_missing_values_fraction_msg
 
 
 class Variable(ABC):

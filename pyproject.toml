@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "data-cooker"
+name = "datacooker"
 version = "0.1.0"
 description = "Library for data generation based on model specs (Recipes)"
 authors = ["Guilherme <g.lisboa.oliveira@outlook.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "data_cooker"}]
+packages = [{include = "datacooker"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"

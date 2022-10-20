@@ -4,9 +4,9 @@ from typing import Dict
 from numpy import ndarray
 from numpy.random import choice
 from pandas import DataFrame, get_dummies
-from data_cooker.variables.nominal_variable import NominalVariable
+from datacooker.variables.nominal_variable import NominalVariable
 
-from data_cooker.variables.variable import Variable
+from datacooker.variables.variable import Variable
 
 
 class Recipe:
