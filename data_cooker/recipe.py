@@ -18,10 +18,10 @@ class Recipe:
     def __init__(self, model_function: callable, result_label: str = 'result') -> None:
         self.__model: callable = model_function
         self.__result_label: str = result_label
-        self.__variables: Dict[str, Variable] = dict()
-        self.__corr_variables: list[tuple[str, callable]] = list()
+        self.__variables: Dict[str, Variable] = {}
+        self.__corr_variables: list[tuple[str, callable]] = []
         self.__error: callable = None
-        self.__data: Dict[str, ndarray] = dict()
+        self.__data: Dict[str, ndarray] = {}
 
     def add_variable(self, variable: Variable) -> None:
         """Adds an independent variable to the recipe
@@ -163,7 +163,8 @@ def invalid_labels_and_functions_length_msg(length_labels: int, length_functions
     """
 
     return f"""
-        Labels and Functions lists must have the same length: Labels legth: {length_labels}, functions length: {length_functions}.
+        Labels and Functions lists must have the same length: Labels legth: {length_labels}, \
+            functions length: {length_functions}.
     """
 
 

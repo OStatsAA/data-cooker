@@ -1,3 +1,7 @@
+"""
+is_valid_fraction function module
+"""
+
 from numbers import Number
 
 
