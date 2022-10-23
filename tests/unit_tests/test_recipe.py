@@ -1,7 +1,7 @@
 """Recipe module tests"""
 
 import pytest
-from datacooker.recipe import Recipe
+from datacooker.recipes import Recipe
 from datacooker.variables import ContinousVariable, DiscreteVariable, NominalVariable
 
 

@@ -3,7 +3,7 @@
 import math
 from scipy.stats import norm
 from statsmodels.regression.linear_model import OLS, RegressionResults
-from datacooker.recipe import Recipe
+from datacooker.recipes import Recipe
 from datacooker.variables import ContinousVariable
 
 
