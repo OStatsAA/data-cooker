@@ -2,7 +2,6 @@
 Functional tests to validate generated data follow a logistic regression model
 """
 
-from scipy.stats import norm
 from statsmodels.api import GLM, families
 from statsmodels.genmod.generalized_linear_model import GLMResults
 from datacooker.recipes import LogitRecipe
@@ -17,10 +16,9 @@ def test_logistic_regression_one_var() -> None:
     """
     variable_true_coefficient = 10
     recipe = LogitRecipe(lambda variables, error: 0 +
-                         variable_true_coefficient * variables["x"] + error)
+                         variable_true_coefficient * variables["x"])
 
     recipe.add_variable(ContinousVariable("x"))
-    recipe.add_error(lambda variables, size: norm().rvs(size=size))
     data = recipe.cook()
 
     binomial_family = families.Binomial()
