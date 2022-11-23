@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "datacooker"
-version = "0.2.0"
+version = "0.3.0"
 description = "Library for data generation based on model specs (Recipes)"
 authors = ["Guilherme <g.lisboa.oliveira@outlook.com>"]
 license = "MIT"
