@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "datacooker"
-version = "0.1.0"
+version = "0.2.0"
 description = "Library for data generation based on model specs (Recipes)"
 authors = ["Guilherme <g.lisboa.oliveira@outlook.com>"]
 license = "MIT"
@@ -9,7 +9,7 @@ packages = [{include = "datacooker"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
-numpy = "^1.23.3"
+numpy = "^1.23.4"
 scipy = "^1.9.2"
 pandas = "^1.5.0"
 

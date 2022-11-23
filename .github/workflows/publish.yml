@@ -25,13 +25,13 @@ jobs:
         run: |
           pip install poetry
           
-      - name: Activate virtual environemt
-        run : |
-          source .venv/bin/activate
-          
       - name: Install dependencies
         run: |
           poetry install
+      
+      - name: Activate virtual environemt
+        run : |
+          source .venv/bin/activate
         
       - name: Set PYPI config
         run: |
