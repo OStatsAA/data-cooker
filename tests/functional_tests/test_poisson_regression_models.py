@@ -14,7 +14,7 @@ def test_poisson_regression_one_var() -> None:
     poisson regression. The model function is the linear combination of \
     variables.
     """
-    variable_true_coefficient = 10
+    variable_true_coefficient = 1
     recipe = PoissonRecipe(lambda variables, error: 0 + variable_true_coefficient * variables["x"])
 
     recipe.add_variable(ContinousVariable("x"))
