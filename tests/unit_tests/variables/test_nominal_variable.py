@@ -16,3 +16,4 @@ def test_should_generate_c_categories_n_times() -> None:
 
     assert len(np.unique(data)) == categories_count
     assert len(data) == size
+    assert len(variable.categories) == categories_count

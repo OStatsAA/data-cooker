@@ -7,6 +7,8 @@ from scipy.stats import rv_discrete, poisson
 
 from .variable import Variable
 
+DiscreteDistribution = rv_discrete | list | np.ndarray
+
 
 class DiscreteVariable(Variable):
     """
@@ -15,12 +17,18 @@ class DiscreteVariable(Variable):
 
     def __init__(self,
                  label: str,
-                 distribution: rv_discrete = poisson(1),
+                 distribution: DiscreteDistribution = poisson(1),
                  missing_values_fraction: float = 0) -> None:
         super().__init__(label, missing_values_fraction)
         self.__values = []
-        self.__distribtuion: rv_discrete = distribution
+        self.__distribtuion: DiscreteDistribution = distribution
 
     def simulate_values(self, size: int) -> np.ndarray:
-        self.__values = self.__distribtuion.rvs(size=size)
+        distribution_type = type(self.__distribtuion)
+
+        if distribution_type is list or distribution_type is np.ndarray:
+            self.__values = np.random.choice(self.__distribtuion, size)
+        else:
+            self.__values = self.__distribtuion.rvs(size=size)
+
         return self.__values
